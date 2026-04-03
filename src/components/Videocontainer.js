@@ -9,15 +9,21 @@ useEffect(()=>{
 }, []);
 
 const getvideo = async () => {
-const vidata= await fetch(YOUTUBE_API);
-const json= await vidata.json();
-setVideo(json.items)
+  const vidata = await fetch(YOUTUBE_API);
+  const json = await vidata.json();
+  // Keep state as an array so `video.map(...)` never crashes.
+  setVideo(Array.isArray(json?.items) ? json.items : []);
 
 }
-  return  <div>
-    <Videocard info = {video[0]}/>
-    </div>;
+
+  return (
+    <div>
+      {video.map(video => (
+        <Videocard key={video.id} info={video} />
+      ))}
+    </div>
+  );
   
-}
+} 
 
 export default Videocontainer;
